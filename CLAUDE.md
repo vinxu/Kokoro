@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-基于 Kokoro ONNX 模型的多语言 TTS 服务，使用 espeak-ng 实现 G2P（Grapheme-to-Phoneme）转换，支持 30+ 语言和词级时间戳。
+基于 Kokoro ONNX 模型的多语言 TTS 服务，使用 espeak-ng 实现 G2P（Grapheme-to-Phoneme）转换，支持 39 种语言和词级时间戳。
 
 ## 架构
 
@@ -161,14 +161,56 @@ result = tts.synthesize_to_file(
 )
 ```
 
-## 支持的语言代码
+## 支持的语言代码（39 种）
+
+### Kokoro 原生支持（9 种）
 
 | 代码 | 语言 | 代码 | 语言 |
 |------|------|------|------|
 | a | American English | b | British English |
-| f | French | e | Spanish |
-| de | German | i | Italian |
-| ru | Russian | pl | Polish |
-| nl | Dutch | tr | Turkish |
-| pt | Portuguese | ja | Japanese |
-| ko | Korean | zh | Chinese |
+| e | Spanish | f | French |
+| h | Hindi | i | Italian |
+| j | Japanese | p | Portuguese (Brazil) |
+| z | Chinese | | |
+
+### 拉丁语系扩展（15 种）
+
+| 代码 | 语言 | 代码 | 语言 |
+|------|------|------|------|
+| de | German | nl | Dutch |
+| pl | Polish | cs | Czech |
+| ro | Romanian | sv | Swedish |
+| da | Danish | no | Norwegian |
+| fi | Finnish | ca | Catalan |
+| eu | Basque | gl | Galician |
+| es-mx | Spanish (Mexico) | fr-ca | French (Canada) |
+| pt-pt | Portuguese (Portugal) | | |
+
+### 西里尔语系（6 种）
+
+| 代码 | 语言 | 代码 | 语言 |
+|------|------|------|------|
+| ru | Russian | uk | Ukrainian |
+| be | Belarusian | bg | Bulgarian |
+| sr | Serbian | mk | Macedonian |
+
+### 其他语言（9 种）
+
+| 代码 | 语言 | 代码 | 语言 |
+|------|------|------|------|
+| el | Greek | tr | Turkish |
+| ar | Arabic | he | Hebrew |
+| ko | Korean | vi | Vietnamese |
+| th | Thai | id | Indonesian |
+| ms | Malay | | |
+
+### 扩展语言支持
+
+由于使用 espeak-ng 作为 G2P 后端，可轻松扩展到 100+ 种语言。只需在 `multilingual_g2p.py` 的 `LANG_MAP` 中添加映射：
+
+```python
+LANG_MAP = {
+    'new_lang': 'espeak-lang-code',  # 添加新语言
+    ...
+}
+```
