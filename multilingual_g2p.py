@@ -3,12 +3,20 @@
 多语言 G2P (Grapheme-to-Phoneme) 转换器
 
 使用 espeak-ng 作为后端，支持 100+ 种语言的文本到音素转换
+中文使用 pypinyin 获得更好的效果
 """
 
 import re
 import subprocess
 from typing import Tuple, List, Dict, Optional
 from phoneme_mapping import convert_phonemes, count_phonemes
+
+# 尝试导入中文 G2P
+try:
+    from chinese_g2p import ChineseG2P
+    HAS_CHINESE_G2P = True
+except ImportError:
+    HAS_CHINESE_G2P = False
 
 
 class MultilingualG2P:
@@ -80,6 +88,15 @@ class MultilingualG2P:
         """
         self.espeak_path = espeak_path
         self._verify_espeak()
+
+        # 初始化中文 G2P（如果可用）
+        self.chinese_g2p = None
+        if HAS_CHINESE_G2P:
+            try:
+                self.chinese_g2p = ChineseG2P(include_tone=False)
+                print("Chinese G2P (pypinyin) initialized")
+            except Exception as e:
+                print(f"Warning: Failed to initialize Chinese G2P: {e}")
 
     def _verify_espeak(self):
         """验证 espeak-ng 是否可用"""
@@ -233,6 +250,10 @@ class MultilingualG2P:
                 - phoneme_count: 音素数量
                 - is_word: 是否为单词（非标点）
         """
+        # 中文使用专门的 G2P
+        if lang == 'z' and self.chinese_g2p is not None:
+            return self.chinese_g2p.convert(text)
+
         # 获取 espeak 语言代码
         espeak_lang = self.LANG_MAP.get(lang, 'en-us')
 

@@ -161,77 +161,47 @@ result = tts.synthesize_to_file(
 )
 ```
 
-## 支持的语言代码（39 种）
+## 支持的语言代码
 
-### Kokoro 原生支持（9 种）
+### 推荐使用（欧洲语言，效果好）
 
 | 代码 | 语言 | 代码 | 语言 |
 |------|------|------|------|
 | a | American English | b | British English |
 | e | Spanish | f | French |
-| h | Hindi | i | Italian |
-| j | Japanese | p | Portuguese (Brazil) |
-| z | Chinese | | |
+| i | Italian | de | German |
+| nl | Dutch | pl | Polish |
+| ru | Russian | pt | Portuguese |
 
-### 拉丁语系扩展（15 种）
+### 不推荐使用（效果差）
 
-| 代码 | 语言 | 代码 | 语言 |
-|------|------|------|------|
-| de | German | nl | Dutch |
-| pl | Polish | cs | Czech |
-| ro | Romanian | sv | Swedish |
-| da | Danish | no | Norwegian |
-| fi | Finnish | ca | Catalan |
-| eu | Basque | gl | Galician |
-| es-mx | Spanish (Mexico) | fr-ca | French (Canada) |
-| pt-pt | Portuguese (Portugal) | | |
+| 代码 | 语言 | 问题 |
+|------|------|------|
+| z | Chinese | 发音不准，像大舌头 |
+| j | Japanese | espeak-ng G2P 完全失败 |
+| ko | Korean | 同上 |
+| h | Hindi | 未充分测试 |
 
-### 西里尔语系（6 种）
+**原因**：Kokoro 模型主要针对欧洲语言训练，对声调语言（中文）和非拉丁语系支持差。中日韩 TTS 建议使用专门的服务（如 Edge TTS、Azure Speech）。
 
-| 代码 | 语言 | 代码 | 语言 |
-|------|------|------|------|
-| ru | Russian | uk | Ukrainian |
-| be | Belarusian | bg | Bulgarian |
-| sr | Serbian | mk | Macedonian |
+### 其他可用语言（未充分测试）
 
-### 其他语言（9 种）
+| 类别 | 语言代码 |
+|------|----------|
+| 拉丁语系 | cs, ro, sv, da, no, fi, ca, eu, gl |
+| 西里尔语系 | uk, be, bg, sr, mk |
+| 其他 | el, tr |
 
-| 代码 | 语言 | 代码 | 语言 |
-|------|------|------|------|
-| el | Greek | tr | Turkish |
-| ar | Arabic | he | Hebrew |
-| ko | Korean | vi | Vietnamese |
-| th | Thai | id | Indonesian |
-| ms | Malay | | |
+### 语音包选择
 
-### 使用说明
+根据语言选择对应的语音包：
 
-**以上 39 种语言全部已配置完成**，可直接使用，无需额外设置：
-
-```python
-tts = TTSService(model_dir='./kokoro-model')
-
-# 任意语言直接调用
-result = tts.synthesize("Hello world", language='a')     # 美式英语
-result = tts.synthesize("Guten Tag", language='de')      # 德语
-result = tts.synthesize("Привет мир", language='ru')     # 俄语
-result = tts.synthesize("مرحبا بالعالم", language='ar')   # 阿拉伯语
-result = tts.synthesize("안녕하세요", language='ko')       # 韩语
-```
-
-`demo.py` 中已测试 10 种语言：`a`, `b`, `f`, `e`, `de`, `i`, `ru`, `pl`, `nl`, `tr`
-
-### 扩展更多语言
-
-由于使用 espeak-ng 作为 G2P 后端，可轻松扩展到 100+ 种语言。只需在 `multilingual_g2p.py` 的 `LANG_MAP` 中添加映射：
-
-```python
-LANG_MAP = {
-    # 添加新语言：'自定义代码': 'espeak-ng语言代码'
-    'hu': 'hu',    # Hungarian
-    'sk': 'sk',    # Slovak
-    ...
-}
-```
-
-espeak-ng 支持的语言列表：`espeak-ng --voices`
+| 语言 | 推荐语音包 |
+|------|-----------|
+| 英语 (American) | af_heart, af_bella, am_adam |
+| 英语 (British) | bf_emma, bm_george |
+| 法语 | ff_siwis |
+| 西班牙语 | ef_dora, em_alex |
+| 意大利语 | if_sara, im_nicola |
+| 日语 | jf_alpha (效果差) |
+| 中文 | zf_xiaoxiao (效果差) |
