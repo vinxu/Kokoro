@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Model files (too large for git)
+kokoro-model/
+*.onnx
+*.bin
+
+# Generated audio files
+*.wav
+demo_output/
+*.json
+!requirements.txt
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Test files
+test_*.wav
+french_example.*
