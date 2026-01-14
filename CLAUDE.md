@@ -204,13 +204,34 @@ result = tts.synthesize_to_file(
 | th | Thai | id | Indonesian |
 | ms | Malay | | |
 
-### 扩展语言支持
+### 使用说明
+
+**以上 39 种语言全部已配置完成**，可直接使用，无需额外设置：
+
+```python
+tts = TTSService(model_dir='./kokoro-model')
+
+# 任意语言直接调用
+result = tts.synthesize("Hello world", language='a')     # 美式英语
+result = tts.synthesize("Guten Tag", language='de')      # 德语
+result = tts.synthesize("Привет мир", language='ru')     # 俄语
+result = tts.synthesize("مرحبا بالعالم", language='ar')   # 阿拉伯语
+result = tts.synthesize("안녕하세요", language='ko')       # 韩语
+```
+
+`demo.py` 中已测试 10 种语言：`a`, `b`, `f`, `e`, `de`, `i`, `ru`, `pl`, `nl`, `tr`
+
+### 扩展更多语言
 
 由于使用 espeak-ng 作为 G2P 后端，可轻松扩展到 100+ 种语言。只需在 `multilingual_g2p.py` 的 `LANG_MAP` 中添加映射：
 
 ```python
 LANG_MAP = {
-    'new_lang': 'espeak-lang-code',  # 添加新语言
+    # 添加新语言：'自定义代码': 'espeak-ng语言代码'
+    'hu': 'hu',    # Hungarian
+    'sk': 'sk',    # Slovak
     ...
 }
 ```
+
+espeak-ng 支持的语言列表：`espeak-ng --voices`
